@@ -1,3 +1,6 @@
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 const images = [
   {
     preview:
@@ -64,44 +67,26 @@ const images = [
   },
 ];
 
-// Створюємо скрипт для створення галереї зображень на основі масиву даних.
-const gallery = document.querySelector('ul.gallery'); 
-
+const galleryContainer = document.querySelector('.gallery');
 
 const galleryMarkup = images.map(({ preview, original, description }) => {
-    
-   // Створюємо <li> елемент
-  const li = document.createElement('li'); 
+  return `
+    <li class="gallery-item">
+      <a class="gallery-link" href="${original}">
+        <img
+          class="gallery-image"
+          src="${preview}"
+          alt="${description}"
+        />
+      </a>
+    </li>
+  `;
+}).join('');
 
-  // Створюємо <a> елемент
-  const link = document.createElement('a');
-  link.href = original;
-  link.classList.add('gallery_link');
+galleryContainer.innerHTML = galleryMarkup;
 
-  // Створюємо <img> елемент
-  const img = document.createElement('img'); 
-  img.src = preview;
-  img.alt = description; 
-  img.dataset.source = original;
-  
-
-  link.appendChild(img); // Додаємо <img> в <a>
-  li.appendChild(link);
-  return li;
-});
-gallery.append(...galleryMarkup);
-
-
-
-gallery.addEventListener('click', function (event) {
-  event.preventDefault();
- 
-  const target = event.target; // Отримуємо елемент, по якому був клік
-  
-  if (event.target.tagName === 'IMG') {  // Перевіряємо, що клік був саме по зображенню
-  
-    const largeImageURL = target.dataset.source;
-    // Отримуємо посилання на велике зображення з data-атрибуту
-      console.log(largeImageURL);
-      }
+const gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
 });
